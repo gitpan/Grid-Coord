@@ -4,7 +4,7 @@ use strict; use warnings;
 use Data::Dumper;
 use Carp qw/confess/;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 # $Id$
 
 ########################################### main pod documentation begin ##
@@ -124,6 +124,7 @@ perl(1).
 use overload
 	q("") => \&stringify,
 	q(==) => \&equals,
+	q(!=) => \&not_equals,
 	q(+)  => \&offset,
 	q(-)  => \&delta;
 
@@ -215,6 +216,11 @@ sub equals {
 	}
 	return $self;
 }
+sub not_equals {
+    # new versions of Test::Builder seem to make cmp_ok fail on this
+	my ($self, $other) = @_;
+    return ! $self->equals($other);
+}
 
 sub offset { # 'add' 2 ranges together, offsetting them
 	my $self=shift;
@@ -290,7 +296,10 @@ sub only {
 	}
 }
 
+{
+no warnings 'once';
 *cell_iterator=\&cell_iterator_rowwise;
+}
 sub cell_iterator_rowwise {
 	my $self=shift;
 	return $self->_cell_iterator(

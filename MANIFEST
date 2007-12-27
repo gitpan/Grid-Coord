@@ -1,6 +1,7 @@
 Build.PL
+CHANGES
 lib/Grid/Coord.pm
 MANIFEST			This list of files
 META.yml
-t/grid.t
 README
+t/grid.t
